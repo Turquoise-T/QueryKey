@@ -81,19 +81,35 @@ public class ThreadTest {
         long endTime=System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
 
-        long startTime1=System.currentTimeMillis();
-        List<String>  allMsgList = test2.getMsg();
-        for(String str : allMsgList){
+        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File("hunan_complete.txt")));
+        for(int i = 0; i < numThreads; i++){
+            File file = new File(String.format("hunan%s.txt",num));
+            FileInputStream inputStream = new FileInputStream(file);
+            BufferedInputStream in = new BufferedInputStream(inputStream);
 
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            int len = -1;
+            byte[] bt = new byte[1024*1024]; //1M every time
+            while((len = in.read(bt)) != -1){
+                out.write(bt, 0, len);
             }
 
+            in.close();
+            inputStream.close();
+            out.flush();
         }
-        long endTime1=System.currentTimeMillis(); //获取结束时间
-        System.out.println("程序运行时间： "+(endTime1-startTime1)+"ms");
+//        long startTime1=System.currentTimeMillis();
+//        List<String>  allMsgList = test2.getMsg();
+//        for(String str : allMsgList){
+//
+//            try {
+//                Thread.sleep(100);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        long endTime1=System.currentTimeMillis(); //获取结束时间
+//        System.out.println("程序运行时间： "+(endTime1-startTime1)+"ms");
 
     }
 
