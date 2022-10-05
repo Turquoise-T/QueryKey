@@ -70,33 +70,41 @@ public class ThreadTest {
         final ExecutorService exec = Executors.newFixedThreadPool(numThreads);
         //多线程运行
         long startTime=System.currentTimeMillis();
-        String keyword = "湖南";
+        List<String> keywords = new ArrayList<>();
+        keywords.add("湖南");;
         int num=0;
-        for(int ii=0; ii<numThreads;ii++){
-            exec.submit(new MyThread(tt.get(ii),latch,"Threadzcy"+ii,keyword,String.format("hunan%s",num)));
-            num++;
-        }
-        latch.await();
-        exec.shutdown();
-        long endTime=System.currentTimeMillis(); //获取结束时间
-        System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
-
-        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File("src/main/resources/files/searchResult/hunan_complete.txt")));
-        for(int i = 0; i < numThreads; i++){
-            File file = new File(String.format("src/main/resources/files/searchResult/hunan%s.txt",i));
-            FileInputStream inputStream = new FileInputStream(file);
-            BufferedInputStream in = new BufferedInputStream(inputStream);
-
-            int len = -1;
-            byte[] bt = new byte[1024*1024]; //1M every time
-            while((len = in.read(bt)) != -1){
-                out.write(bt, 0, len);
+        for(int i = 0; i < keywords.size(); i++) {
+            String keyword = keywords.get(i);
+            for (int ii = 0; ii < numThreads; ii++) {
+                exec.submit(new MyThread(tt.get(ii), latch, "Threadzcy" + ii, keyword, String.format("%s%s", keyword, num)));
+                num++;
             }
 
-            in.close();
-            inputStream.close();
-            out.flush();
+            latch.await();
+            exec.shutdown();
+            long endTime=System.currentTimeMillis(); //获取结束时间
+            System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
+
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(String.format("src/main/resources/files/searchResult/%s_complete.txt", keyword))));
+            for(int ii = 0; ii < numThreads; ii++){
+                File file = new File(String.format("src/main/resources/files/searchResult/%s%s.txt",keyword, ii));
+                FileInputStream inputStream = new FileInputStream(file);
+                BufferedInputStream in = new BufferedInputStream(inputStream);
+
+                int len = -1;
+                byte[] bt = new byte[1024*1024]; //1M every time
+                while((len = in.read(bt)) != -1){
+                    out.write(bt, 0, len);
+                }
+
+                in.close();
+                inputStream.close();
+                out.flush();
+                File file_delete = new File(String.format("src/main/resources/files/searchResult/%s%s.txt",keyword,ii));
+                file_delete.delete();
+            }
         }
+
 //        long startTime1=System.currentTimeMillis();
 //        List<String>  allMsgList = test2.getMsg();
 //        for(String str : allMsgList){
