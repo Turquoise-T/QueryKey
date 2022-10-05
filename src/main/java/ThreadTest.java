@@ -81,7 +81,7 @@ public class ThreadTest {
         long endTime=System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
 
-        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File("hunan_complete.txt")));
+        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File("src/main/resources/files/searchResult/hunan_complete.txt")));
         for(int i = 0; i < numThreads; i++){
             File file = new File(String.format("src/main/resources/files/searchResult/hunan%s.txt",i));
             FileInputStream inputStream = new FileInputStream(file);
