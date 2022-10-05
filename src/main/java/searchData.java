@@ -5,7 +5,7 @@ public class searchData {
 
     public static void search(String key,String filename) throws IOException {
         //定义输入流，打开源数据集txt文件
-        InputStreamReader inStream = new InputStreamReader(new FileInputStream(new File("src/main/resources/files/preResult.txt")), "UTF-8");
+        InputStreamReader inStream = new InputStreamReader(new FileInputStream(new File("src/main/resources/files/cleanResult.txt")), "UTF-8");
         //定义输出流，写入搜索到的匹配数据
         OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(new File(String.format("src/main/resources/files/searchResult/%s.txt",filename))), "UTF-8");
         BufferedReader br = new BufferedReader(inStream);
