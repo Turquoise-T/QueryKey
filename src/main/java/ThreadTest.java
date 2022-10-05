@@ -83,7 +83,7 @@ public class ThreadTest {
 
         BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File("hunan_complete.txt")));
         for(int i = 0; i < numThreads; i++){
-            File file = new File(String.format("hunan%s.txt",num));
+            File file = new File(String.format("src/main/resources/files/searchResult/hunan%s.txt",i));
             FileInputStream inputStream = new FileInputStream(file);
             BufferedInputStream in = new BufferedInputStream(inputStream);
 

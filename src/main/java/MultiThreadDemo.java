@@ -71,7 +71,7 @@ public class MultiThreadDemo {
         final ExecutorService executorService = Executors.newFixedThreadPool(5);
         long startTime = System.currentTimeMillis();
         for(int i = 0; i < 5; i++){
-            executorService.submit(new MyThread(tt.get(i), latch, "Thread"+i, keyword));
+            //executorService.submit(new MyThread(tt.get(i), latch, "Thread"+i, keyword));
         }
         latch.await();
         executorService.shutdown();
@@ -81,30 +81,4 @@ public class MultiThreadDemo {
     }
 }
 
-class MyThread implements Runnable {
-    private List<String> msgList = null;
-    private CountDownLatch latch = null;
-    private String name;
-    private String keyword;
-
-    public MyThread(List<String> msgList, CountDownLatch latch, String name, String keyword){
-        this.msgList = msgList;
-        this.latch = latch;
-        this.name = name;
-        this.keyword = keyword;
-    }
-
-    @Override
-    public void run() {
-        for(String str : msgList){
-            System.out.println(this.name + " is running");
-            try{
-                Thread.sleep(100);
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }
-        }
-        latch.countDown();
-    }
-}
 
