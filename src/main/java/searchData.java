@@ -29,14 +29,14 @@ public class searchData {
         int numFinished = 0;
         while (!finish) {
             numFinished = 0;
-            for (int i = 0; i < threads.length; i++) {
-                if (threads[i].getState() == Thread.State.TERMINATED) {
-                    numFinished++;
-                    if (tasks[i].isFinish(valueString,br)) {
-                        finish = true;
-                    }
-                }
-            }
+//            for (int i = 0; i < threads.length; i++) {
+//                if (threads[i].getState() == Thread.State.TERMINATED) {
+//                    numFinished++;
+//                    if (tasks[i].isFinish(valueString,br)) {
+//                        finish = true;
+//                    }
+//                }
+//            }
             if (numFinished == threads.length) {
                 finish = true;
             }
