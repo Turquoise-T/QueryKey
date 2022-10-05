@@ -20,7 +20,7 @@ public class StringFinder implements Runnable{
 
     @Override
     public void run() {
-        String fileContent =
+        //String fileContent =
     }
 
     public List<List<String>> splitList(int listsNumber, List<String> msg){
@@ -53,6 +53,6 @@ public class StringFinder implements Runnable{
         String keyword = null;
         File file1 = new File(file);
         StringFinder stringFinder = new StringFinder(file1, keyword);
-        stringFinder.splitFile = stringFinder.splitList()
+        //stringFinder.splitFile = stringFinder.splitList()
     }
 }
