@@ -7,6 +7,9 @@ import java.io.*;
 
 public class wordFreq {
     public static void wordFrequency() throws IOException {
+        //定义输出流，写入搜索到的匹配数据
+        OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(new File("src/main/resources/files/wordFreqResult.txt")), "UTF-8");
+        BufferedWriter bw = new BufferedWriter(outStream);
         Map<String, Integer> map = new HashMap<>();
         String article = getString();
         System.out.println(article);
@@ -40,6 +43,12 @@ public class wordFreq {
         while ((entry = getMax(map)) != null){
             list.add(entry);
         }
+        for (int i =0;i<list.size();i++){
+            bw.append(list.get(i).toString());
+            bw.newLine();
+        }
+        //关闭
+        bw.close();
         System.out.println("====================统计结果========================");
         for (int i =0;i<25;i++){
             System.out.println("第"+(i+1)+": "+list.get(i));
