@@ -20,7 +20,7 @@ public class MyThread implements Runnable{
     public void run() {
         OutputStreamWriter outStream = null;
         try {
-            outStream = new OutputStreamWriter(new FileOutputStream(new File(String.format("src/main/resources/files/searchResult/%s.txt",filename))), "UTF-8");
+            outStream = new OutputStreamWriter(new FileOutputStream(new File(String.format("src/main/resources/files/threadSearchResult/%s.txt",filename))), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
