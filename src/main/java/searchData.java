@@ -63,6 +63,18 @@ public class searchData {
 
 
     public static void main(String[] args) throws IOException {
-        search("湖南","hunan");
+        long startTime = System.currentTimeMillis();    //获取开始时间
+        search("图片","image");
+        search("手机","phone");
+        search("小说","novel");
+        search("视频","video");
+        search("大学","university");
+        search("中国","China");
+        search("电影","film");
+        search("游戏","game");
+        search("英语","English");
+        search("电脑","computer");
+        long endTime = System.currentTimeMillis();    //获取结束时间
+        System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
     }
 }
