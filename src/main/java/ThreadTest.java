@@ -83,7 +83,7 @@ public class ThreadTest {
         ExecutorService exec = Executors.newFixedThreadPool(numThreads);
 
             //多线程运行
-        long startTime=System.currentTimeMillis();
+        //long startTime=System.currentTimeMillis();
 
         //种子关键词列表
         List<String> keywords = new ArrayList<>();
@@ -108,8 +108,8 @@ public class ThreadTest {
             }
 
             latch.await();
-            long endTime=System.currentTimeMillis(); //获取结束时间
-            System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
+            //long endTime=System.currentTimeMillis(); //获取结束时间
+            //System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
 
             BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(String.format("src/main/resources/files/threadSearchResult/%s_complete.txt", keyword))));
             for(int ii = 0; ii < numThreads; ii++){
@@ -126,11 +126,18 @@ public class ThreadTest {
                 in.close();
                 inputStream.close();
                 out.flush();
+                //File file_delete = new File(String.format("src/main/resources/files/threadSearchResult/%s%s.txt",keyword,ii));
+                //file_delete.delete();
+            }
+        }
+
+        for(int i = 0; i < keywords.size(); i++){
+            String keyword = keywords.get(i);
+            for(int ii = 0; ii < numThreads; ii++) {
                 File file_delete = new File(String.format("src/main/resources/files/threadSearchResult/%s%s.txt",keyword,ii));
                 file_delete.delete();
             }
         }
-
         exec.shutdown();
 
         long endTime1 = System.currentTimeMillis();    //获取结束时间
