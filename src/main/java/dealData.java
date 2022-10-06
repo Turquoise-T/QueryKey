@@ -26,15 +26,15 @@ public class dealData {
     public static void localDic(){
         try {
             //读取的是根目录下的
-            Forest rootForest = Library.makeForest("library/userLibrary.dic");
+            Forest rootForest = Library.makeForest("src/main/resources/library/userLibrary.dic");
             System.out.println(rootForest.toMap());
             String str = "阿里巴巴是我喜欢的企业！初音未来是我最喜欢的虚拟歌手！";
             //加载字典文件,取的是resource下的
-            Forest resourceForest=Library.makeForest(Objects.requireNonNull(dealData.class.getResourceAsStream("/library/userLibrary.dic")));
+            Forest resourceForest=Library.makeForest(Objects.requireNonNull(dealData.class.getResourceAsStream("library/userLibrary.dic")));
             Result result=ToAnalysis.parse(str, resourceForest);//传入forest
             List<Term> termList = result.getTerms();
             for(Term term:termList){
-                System.out.println(term.getName());
+                System.out.println(term.getName()+term.getNatureStr());
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -105,7 +105,7 @@ public class dealData {
         bw.close();
     }
     public static void main(String[] args) throws IOException {
-        deal_clean();
+        //deal_clean();
         localDic();
 
 //        String str = "这里作者使用了注意力的方法进行了特征融合，在这里作者主要参考的是使用SENet网络的结构。这是因为SENet计算attention的方式就是把每个通道的像素值做一个平均之后，然后经过一系列操作后，用sigmoid函数归一化。这样的操作对于大尺度的目标还是有效果的，但是对于小目标效果就不太好，所以的话本文就提出了多尺度的方法来计算。其实我个人也进行了一些注意力的特征融合操作。其实效果还是不错的。\n";

@@ -1,9 +1,11 @@
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.context.support.UiApplicationContextUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,11 +15,10 @@ import java.util.concurrent.*;
 @Component
 public class ThreadTest {
     private  List<String> msg = new ArrayList();
-    private List<String>  spliteList = null;
-    @Autowired
-    private ThreadPoolConfig threadPoolConfig;
+    private List<String>  splitList = null;
+    private ThreadPoolConfig threadPoolConfig = new ThreadPoolConfig();
 
-    public ThreadTest(int  i) throws IOException {
+    public ThreadTest() throws IOException {
         threadPoolConfig.threadPoolTaskExecutor();
         String valueString = null;
         InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream("src/main/resources/files/cleanResult.txt"));
@@ -75,13 +76,11 @@ public class ThreadTest {
         int numThreads = Runtime.getRuntime().availableProcessors();
         //int numThreads = 10;
         //初始化数据
-        ThreadTest test2 = new ThreadTest(113);
+        ThreadTest test2 = new ThreadTest();
         //拆分数据
         List<List<String>>  tt = test2.spliteList(numThreads);
         CountDownLatch latch =  new CountDownLatch( numThreads );
-        final ExecutorService exec = Executors.newFixedThreadPool(numThreads);
-
-
+        ExecutorService exec = Executors.newFixedThreadPool(numThreads);
 
             //多线程运行
         long startTime=System.currentTimeMillis();
@@ -99,8 +98,9 @@ public class ThreadTest {
         keywords.add("英语");
         keywords.add("电脑");
 
-        int num=0;
         for(int i = 0; i < keywords.size(); i++) {
+            int num=0;
+
             String keyword = keywords.get(i);
             for (int ii = 0; ii < numThreads; ii++) {
                 exec.submit(new MyThread(tt.get(ii), latch, "Threadzcy" + ii, keyword, String.format("%s%s", keyword, num)));
@@ -108,7 +108,6 @@ public class ThreadTest {
             }
 
             latch.await();
-            exec.shutdown();
             long endTime=System.currentTimeMillis(); //获取结束时间
             System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
 
@@ -131,6 +130,8 @@ public class ThreadTest {
                 file_delete.delete();
             }
         }
+
+        exec.shutdown();
 
         long endTime1 = System.currentTimeMillis();    //获取结束时间
         System.out.println("程序总运行时间：" + (endTime1 - startTime1) + "ms");    //输出程序运行时间
