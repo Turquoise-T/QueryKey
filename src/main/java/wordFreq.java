@@ -6,12 +6,12 @@ import java.util.*;
 import java.io.*;
 
 public class wordFreq {
-    public static void wordFrequency() throws IOException {
+    public static void wordFrequency(String filename) throws IOException {
         //定义输出流，写入搜索到的匹配数据
-        OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(new File("src/main/resources/files/wordFreqResult.txt")), "UTF-8");
+        OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(new File(String.format("src/main/resources/files/wordFreResult/counted_%s",filename))), "UTF-8");
         BufferedWriter bw = new BufferedWriter(outStream);
         Map<String, Integer> map = new HashMap<>();
-        String article = getString();
+        String article = getString(filename);
         System.out.println(article);
 //        String result = ToAnalysis.parse(article).toStringWithOutNature();
         String[] words = article.split("/");
@@ -104,8 +104,8 @@ public class wordFreq {
      * @return
      * @throws IOException
      */
-    public static String getString() throws IOException {
-        FileInputStream inputStream = new FileInputStream(new File("src/main/resources/files/ansj_cutResult.txt"));
+    public static String getString(String filename) throws IOException {
+        FileInputStream inputStream = new FileInputStream(new File(String.format("src/main/resources/files/%s",filename)));
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder strBuilder = new StringBuilder();
         String line;
@@ -118,6 +118,7 @@ public class wordFreq {
     }
 
     public static void main(String[] args) throws IOException {
-        wordFrequency();
+        wordFrequency("ansj_cutResult.txt");
+        wordFrequency("jieba_cutResult.txt");
     }
 }
