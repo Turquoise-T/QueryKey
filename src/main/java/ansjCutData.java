@@ -77,7 +77,7 @@ public class ansjCutData {
 
     //采用原始词典下的分词清洗
     static void cut_clean() throws IOException{
-        String fileName = "src/main/resources/files/cleanResult.txt";
+        String fileName = "src/main/resources/files/cleanResult1.txt";
         //定义输出流，写入搜索到的匹配数据
         OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(new File("src/main/resources/files/ansj_cutResult.txt")), "UTF-8");
         BufferedWriter bw = new BufferedWriter(outStream);
