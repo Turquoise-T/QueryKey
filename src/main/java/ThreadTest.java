@@ -71,10 +71,10 @@ public class ThreadTest {
 
     public static void main(String[] args) throws InterruptedException, IOException {
 
-        long startTime1 = System.currentTimeMillis();    //获取开始时间
 
-        int numThreads = Runtime.getRuntime().availableProcessors();
-        //int numThreads = 10;
+
+        //int numThreads = Runtime.getRuntime().availableProcessors();
+        int numThreads =10;
         //初始化数据
         ThreadTest test2 = new ThreadTest();
         //拆分数据
@@ -98,6 +98,7 @@ public class ThreadTest {
         keywords.add("英语");
         keywords.add("电脑");
 
+        long startTime1 = System.currentTimeMillis();    //获取开始时间
         for(int i = 0; i < keywords.size(); i++) {
             int num=0;
 
@@ -111,25 +112,37 @@ public class ThreadTest {
             //long endTime=System.currentTimeMillis(); //获取结束时间
             //System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
 
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(String.format("src/main/resources/files/threadSearchResult/%s_complete.txt", keyword))));
-            for(int ii = 0; ii < numThreads; ii++){
-                File file = new File(String.format("src/main/resources/files/threadSearchResult/%s%s.txt",keyword, ii));
-                FileInputStream inputStream = new FileInputStream(file);
-                BufferedInputStream in = new BufferedInputStream(inputStream);
+            Thread.sleep(20);
 
-                int len = -1;
-                byte[] bt = new byte[1024*1024]; //1M every time
-                while((len = in.read(bt)) != -1){
-                    out.write(bt, 0, len);
+
+
+            if(exec.isTerminated() == false) {
+                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(String.format("src/main/resources/files/threadSearchResult/%s_complete.txt", keyword))));
+                for(int ii = 0; ii < numThreads; ii++){
+                    File file = new File(String.format("src/main/resources/files/threadSearchResult/%s%s.txt",keyword, ii));
+                    FileInputStream inputStream = new FileInputStream(file);
+                    BufferedInputStream in = new BufferedInputStream(inputStream);
+
+                    int len = -1;
+                    byte[] bt = new byte[1024*1024]; //1M every time
+                    while((len = in.read(bt)) != -1){
+                        out.write(bt, 0, len);
+                    }
+
+                    in.close();
+                    inputStream.close();
+                    out.flush();
+                    //File file_delete = new File(String.format("src/main/resources/files/threadSearchResult/%s%s.txt",keyword,ii));
+                    //file_delete.delete();
                 }
-
-                in.close();
-                inputStream.close();
-                out.flush();
-                //File file_delete = new File(String.format("src/main/resources/files/threadSearchResult/%s%s.txt",keyword,ii));
-                //file_delete.delete();
+                out.close();
             }
         }
+
+        exec.shutdown();
+        long endTime1 = System.currentTimeMillis();    //获取结束时间
+        System.out.println("程序运行时间：" + (endTime1 - startTime1 - 200) + "ms");    //输出程序运行时间
+
 
         for(int i = 0; i < keywords.size(); i++){
             String keyword = keywords.get(i);
@@ -138,10 +151,8 @@ public class ThreadTest {
                 file_delete.delete();
             }
         }
-        exec.shutdown();
 
-        long endTime1 = System.currentTimeMillis();    //获取结束时间
-        System.out.println("程序总运行时间：" + (endTime1 - startTime1) + "ms");    //输出程序运行时间
+
 //        long startTime1=System.currentTimeMillis();
 //        List<String>  allMsgList = test2.getMsg();
 //        for(String str : allMsgList){
