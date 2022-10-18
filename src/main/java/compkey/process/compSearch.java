@@ -11,7 +11,9 @@ public class compSearch {
      * @param fileOut
      * @throws IOException
      */
-    public static void search(String seed,String mid,String fileOut) throws IOException {
+    public static int search(String seed,String mid,String fileOut) throws IOException {
+        //定义搜索记录数
+        int counter = 0;
         //定义输出流，写入搜索到的匹配数据
         OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(new File(fileOut)), "UTF-8");
         BufferedWriter bw = new BufferedWriter(outStream);
@@ -21,6 +23,7 @@ public class compSearch {
                 line = sc.nextLine();
                 //包含中介但不包含种子
                 if(!line.contains(seed)&&line.contains(mid)){
+                    counter++;
                     bw.append(line);
                     bw.newLine();
                 }
@@ -30,5 +33,6 @@ public class compSearch {
         }
         bw.close();
         System.out.println("=========="+mid+"的相关搜索记录查询已完成==========");
+        return counter;
     }
 }

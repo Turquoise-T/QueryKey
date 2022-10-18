@@ -12,13 +12,15 @@ public class CompKey {
 
         System.out.println("查询种子关键词的相关搜索记录...");
         //从清洗过的数据中提取出与种子关键字相关的搜索信息并保存
-        util.search(seedKey,"src/main/resources/compkeyFiles/seedSearchResult.txt");
-
+        int infoCounter = util.search(seedKey,"src/main/resources/compkeyFiles/seedSearchResult.txt");
 
         System.out.println("========================================================");
         System.out.println("开始查找中介关键词...");
         //分词
-        ansjCutData.cut_clean("seedSearchResult.txt");
+        //方法一:单线程
+//        ansjCutData.cut_clean("seedSearchResult.txt");
+        //方法二:多线程
+        cutThread.divide("seedSearchResult.txt",infoCounter);
         //词频统计
         countData.wordCount("cutted_seedSearchResult.txt",15);
         //确定中介关键词及相关搜索量
@@ -87,9 +89,12 @@ public class CompKey {
         for(int i =0;i< midKeyList.size();i++){
             String midKey = midKeyList.get(i);
             //筛选出不含种子关键词但含有中介关键字的搜索数据，存储在相应的文件中
-            compSearch.search(seedKey,midKey,String.format("src/main/resources/compkeyFiles/%sCompSearchResult.txt",midKey));
+            int infCounter = compSearch.search(seedKey,midKey,String.format("src/main/resources/compkeyFiles/%sCompSearchResult.txt",midKey));
             //分词
-            ansjCutData.cut_clean(String.format("%sCompSearchResult.txt",midKey));
+            //单线程
+            //ansjCutData.cut_clean(String.format("%sCompSearchResult.txt",midKey));
+            //多线程
+            cutThread.divide(String.format("%sCompSearchResult.txt",midKey),infCounter);
             //词频统计
             countData.wordCount(String.format("cutted_%sCompSearchResult.txt",midKey),10);
 
