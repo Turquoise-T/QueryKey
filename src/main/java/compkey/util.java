@@ -10,7 +10,9 @@ public class util {
      * @param key
      * @throws IOException
      */
-    public static void search(String key,String fileOut) throws IOException {
+    public static int search(String key,String fileOut) throws IOException {
+        //定义搜索记录数
+        int counter = 0;
         //定义输出流，写入搜索到的匹配数据
         OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(new File(fileOut)), "UTF-8");
         BufferedWriter bw = new BufferedWriter(outStream);
@@ -19,6 +21,7 @@ public class util {
             while (sc.hasNextLine()) {
                 line = sc.nextLine();
                 if(line.contains(key)){
+                    counter++;
                     bw.append(line);
                     bw.newLine();
                 }
@@ -28,6 +31,7 @@ public class util {
         }
         bw.close();
         System.out.println("=========="+key+"的相关搜索记录查询已完成==========");
+        return counter;
     }
 
     /***
