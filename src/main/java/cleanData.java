@@ -1,5 +1,3 @@
-import com.sun.org.apache.xalan.internal.xsltc.dom.SimpleResultTreeImpl;
-
 import java.io.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -39,7 +37,7 @@ public class cleanData {
 
     public static void main(String[] args) throws IOException {
         //定义输入流，打开源数据集txt文件
-        InputStreamReader inStream = new InputStreamReader(new FileInputStream(new File("src/main/resources/files/preResult.txt")), "UTF-8");
+        InputStreamReader inStream = new InputStreamReader(new FileInputStream(new File("src/main/resources/files/searchResult/China.txt")), "UTF-8");
         //定义输出流，写入预处理后的数据
         OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(new File("src/main/resources/files/cleanResult.txt")), "UTF-8");
         BufferedReader br = new BufferedReader(inStream);
@@ -47,12 +45,14 @@ public class cleanData {
         String valueString = null;
         //按行读取数据
         while ((valueString = br.readLine()) != null){
+            valueString.trim();
             if(!ifClean(valueString)){
                 replace(valueString);
                 bw.append(valueString);
                 bw.newLine();
             }
         }
+        bw.flush();
         bw.close();
     }
 }
