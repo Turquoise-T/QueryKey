@@ -5,7 +5,6 @@ import org.ansj.domain.Result;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.ToAnalysis;
 
-import javax.annotation.Resource;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;

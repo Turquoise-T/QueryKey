@@ -1,2 +1,4 @@
-package compkey.process;public class jiebaCutData {
+package compkey.process;
+
+public class jiebaCutData {
 }
