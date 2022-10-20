@@ -3,12 +3,13 @@ package compkey;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import compkey.process.*;
 
 public class CompKey {
-    public static void compkey(String seedKey, int minNum) throws UnsupportedEncodingException, IOException, Exception {
+    public static List<Map.Entry<String,Double>> compkey(String seedKey, int minNum) throws UnsupportedEncodingException, IOException, Exception {
 
         System.out.println("查询种子关键词的相关搜索记录...");
         //从清洗过的数据中提取出与种子关键字相关的搜索信息并保存
@@ -188,5 +189,7 @@ public class CompKey {
 
 
         System.out.println("CompKey算法结束...");
+
+        return util.compMap(compKeyList,compResult);
     }
 }

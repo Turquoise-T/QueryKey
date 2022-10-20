@@ -148,7 +148,7 @@ public class cutThread {
             fw.write("");
         }
         //定义线程数
-        int threadNum = 8;
+        int threadNum = 9;
         int startNum = 1;
         int evNum = totalNum/threadNum;
         Thread_writeFile thf1=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
@@ -172,15 +172,24 @@ public class cutThread {
         Thread_writeFile thf7=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf7.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf8=new Thread_writeFile(inFilename,startNum,totalNum);
+        Thread_writeFile thf8=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf8.start();
+        startNum = startNum+evNum;
+        Thread_writeFile thf9=new Thread_writeFile(inFilename,startNum,totalNum);
+        thf9.start();
+
+
+        //进程全部结束才返回值
+        while (thf1.isAlive()||thf2.isAlive()||thf3.isAlive()||thf4.isAlive()||thf5.isAlive()||thf6.isAlive()||thf7.isAlive()||thf8.isAlive()||thf9.isAlive()){
+            continue;
+        }
     }
 
 
     //测试
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();    //获取开始时间
-        divide("seedSearchResult.txt",38511);
+        divide("seedSearchResult.txt",110224);
         long endTime = System.currentTimeMillis();    //获取结束时间
         System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
     }

@@ -50,6 +50,7 @@ public class countData {
 //                wc.put(word, wc.containsKey(word)? wc.get(word)+1 : 1);
 //            }
         }
+        System.out.println("词频统计完成！！！++++");
         //排序输出
         Iterator<Map.Entry<String, Integer>> iterator = wc.entrySet().iterator();
         while (iterator.hasNext()){
@@ -76,5 +77,9 @@ public class countData {
 
         //关闭
         bw.close();
+    }
+
+    public static void main(String []args) throws IOException {
+        wordCount("cutted_seedSearchResult.txt",15);
     }
 }
