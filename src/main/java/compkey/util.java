@@ -78,4 +78,10 @@ public class util {
         return entrys;
     }
 
+    public static String getFilePath(String FileName){
+        String root = System.getProperty("user.dir");
+        String subPath = "src/main/resources/files/";
+        String filePath = root+File.separator+subPath+FileName;
+        return filePath;
+    }
 }

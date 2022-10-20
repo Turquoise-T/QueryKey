@@ -3,18 +3,25 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
+import static compkey.util.getFilePath;
 /***
  * 存储的格式是：某一个单词+（所在的文档+(在相应的文档中出现的次数+行号）)
  */
 public class InvertedEngine {
     public static void main(String[] args) throws IOException{
-        String filePath = "D:/good_memory/大三上/课内/电子商务/常佳宇/QueryKey/src/main/resources/files/searchResult";
-        String docIndex = "D:/good_memory/大三上/课内/电子商务/常佳宇/QueryKey/src/main/resources/files/docIndex.txt";
-        String wordIndex = "D:/good_memory/大三上/课内/电子商务/常佳宇/QueryKey/src/main/resources/files/index.txt";
-        String everyStr = "中国";
+        String filePath = getFilePath("divideFile");
+        String docIndex = getFilePath("indexRecord/docIndex.txt");
+        String wordIndex = getFilePath("indexRecord/index.txt");
+        FileInputStream inputStream = new FileInputStream(getFilePath("1000counted_filterCut.txt"));
         getFileIndex(filePath, docIndex);
-        getWordsFrequency(everyStr, docIndex, wordIndex);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String everyStr = null;
+        while((everyStr = bufferedReader.readLine()) != null)
+        {
+            System.out.println(everyStr);
+            getWordsFrequency(everyStr, docIndex, wordIndex);
+
+        }
         System.out.println("Work Done!");
     }
 
@@ -27,7 +34,8 @@ public class InvertedEngine {
         File[] fileList = file.listFiles();
         BufferedWriter bufw = null;
         try
-        {   //将所有filePath下的文件路径写到docIndex文件中
+        {
+            //将所有filePath下的文件路径写到docIndex文件中
             bufw = new BufferedWriter(new FileWriter(docIndex));
             for(int x = 0 ; x <fileList.length ; x++ )
             {
@@ -74,54 +82,61 @@ public class InvertedEngine {
                 line++;
                 String[] words = wordLine.split("\n");//搜索记录是按照换行来区分的
                 for(String wordOfDoc : words) {
-                    System.out.println(wordOfDoc);//正常
+                    //System.out.println(wordOfDoc);//正常
                     if (!wordOfDoc.equals("")&&wordOfDoc.contains(str))
                     {
-                        System.out.println("不会每次都进来了吧");
-                        wordDeal(str, wordOfDoc, docID, tmp,line);//将从docIndex读取到对应文件内容对做统计处理
+                        wordDeal(str,wordOfDoc,docID,tmp,line);//将从docIndex读取到对应文件内容对做统计处理
                     }
 
                 }
+//                System.out.println("这里是文件"+docID);
             }
+            System.out.println("文件"+docPath+"处理完毕");
             //将处理后的结果写入到wordIndex.txt文件中
-            String wordFreInfo = null;
-            //entrySet方法得到的是HashMap中各个键值对映射关系的集合，然后Map.Entry中包含了getKey(),nextNode()方法的作用就是返回下一个结点
-            Set<Map.Entry<String,TreeMap<Integer,String>>> entrySet = tmp.entrySet();
-            Iterator<Map.Entry<String,TreeMap<Integer,String>>> it = entrySet.iterator();
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(wordIndex));
-            while(it.hasNext())
-            {
-                Map.Entry<String,TreeMap<Integer,String>> em = it.next();
-                wordFreInfo = em.getKey() +"\t" + em.getValue();
-                bufferedWriter.write(wordFreInfo);
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
-            }
-            bufferedWriter.close();
-            bufferedWriter.close();
-            bufrDoc.close();
         }
-
+        String wordFreInfo = null;
+        //entrySet方法得到的是HashMap中各个键值对映射关系的集合，然后Map.Entry中包含了getKey(),nextNode()方法的作用就是返回下一个结点
+        Set<Map.Entry<String,TreeMap<Integer,String>>> entrySet = tmp.entrySet();
+        Iterator<Map.Entry<String,TreeMap<Integer,String>>> it = entrySet.iterator();
+        File file = new File(wordIndex);
+        BufferedWriter bufferedWriter = null;
+        //与写入的方法也有关系
+        if(!file.exists()){
+            bufferedWriter = new BufferedWriter(new FileWriter(wordIndex));
+        }else {
+            bufferedWriter = new BufferedWriter(new FileWriter(wordIndex,true));
+        }
+        while(it.hasNext())
+        {
+            Map.Entry<String,TreeMap<Integer,String>> em = it.next();
+            wordFreInfo = em.getKey() +"\t" + em.getValue();
+            bufferedWriter.write(wordFreInfo);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+        }
+        bufferedWriter.close();
+        bufferedWriter.close();
+        bufrDoc.close();
     }
 
-    public static void wordDeal(String str, String wordOfDoc, String docID, TreeMap<String, TreeMap<Integer, String>>tmp, Integer i){
+    public static void wordDeal(String str, String wordOfDoc,String docID, TreeMap<String, TreeMap<Integer, String>>tmp, Integer i){
         wordOfDoc = wordOfDoc.toLowerCase();
         str = str.toLowerCase();
-        if (!tmp.containsKey(str)){//第一个string
+        if (!tmp.containsKey(str+"+"+docID)){//第一个string
             //单词在统计中是首次出现
             TreeMap<Integer, String> tmpST = new TreeMap<>();
             String record = ""+i;
-            tmpST.put(1,record);
-            tmp.put(str,tmpST);
+            tmpST.put(1,record);//首次出现
+            tmp.put(str+"+"+docID,tmpST);
         }else {//若不是首次出现，则将count++后，再将信息回写到tmpST中
-            TreeMap<Integer, String> tmpST = tmp.get(str);
+            TreeMap<Integer, String> tmpST = tmp.get(str+"+"+docID);
             Integer count = tmpST.lastKey();
             String record = tmpST.get(count);
             record +="+"+i;//以加号作为分割
             tmpST.pollLastEntry();
             count++;
             tmpST.put(count,record);
-            tmp.put(str,tmpST);	//将最新结果回写到tmp中
+            tmp.put(str+"+"+docID,tmpST);	//将最新结果回写到tmp中
         }
     }
     
