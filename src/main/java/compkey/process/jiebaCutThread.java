@@ -1,4 +1,6 @@
 package compkey.process;
+
+import com.huaban.analysis.jieba.JiebaSegmenter;
 import compkey.util;
 import org.ansj.domain.Result;
 import org.ansj.domain.Term;
@@ -7,13 +9,11 @@ import org.ansj.splitWord.analysis.ToAnalysis;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
-public class cutThread {
-
+public class jiebaCutThread {
     public static class Thread_writeFile extends Thread{
 
         private String inFilename;
@@ -30,6 +30,7 @@ public class cutThread {
         public void run(){
             Calendar calstart=Calendar.getInstance();
             File file=new File(String.format("src/main/resources/compkeyFiles/cutted_%s",inFilename));
+            JiebaSegmenter jiebaSegmenter = new JiebaSegmenter();
             try {
                 //对输入的字符串进行分词并存储
                 StringBuffer sb = new StringBuffer();
@@ -39,11 +40,10 @@ public class cutThread {
                     String line = sc.nextLine();
                     counter++;
                     if(counter>=startNum){
-                        Result result = ToAnalysis.parse(line);
-                        List<Term> terms = result.getTerms();
-                        for (Term term : terms) {
-                            if(util.ifRemoveStopWords(term.getName())&&term.getName().length()>=2){
-                                sb.append(term.getName());
+                        List<String> strings = jiebaSegmenter.sentenceProcess(line);
+                        for (String s : strings) {
+                            if(util.ifRemoveStopWords(s)&&s.length()>=2){
+                                sb.append(s);
                                 sb.append("\n");
                             }
                         }
@@ -149,31 +149,31 @@ public class cutThread {
         int threadNum = 9;
         int startNum = 1;
         int evNum = totalNum/threadNum;
-        Thread_writeFile thf1=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
+        cutThread.Thread_writeFile thf1=new cutThread.Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf1.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf2=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
+        cutThread.Thread_writeFile thf2=new cutThread.Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf2.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf3=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
+        cutThread.Thread_writeFile thf3=new cutThread.Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf3.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf4=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
+        cutThread.Thread_writeFile thf4=new cutThread.Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf4.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf5=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
+        cutThread.Thread_writeFile thf5=new cutThread.Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf5.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf6=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
+        cutThread.Thread_writeFile thf6=new cutThread.Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf6.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf7=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
+        cutThread.Thread_writeFile thf7=new cutThread.Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf7.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf8=new Thread_writeFile(inFilename,startNum,startNum+evNum-1);
+        cutThread.Thread_writeFile thf8=new cutThread.Thread_writeFile(inFilename,startNum,startNum+evNum-1);
         thf8.start();
         startNum = startNum+evNum;
-        Thread_writeFile thf9=new Thread_writeFile(inFilename,startNum,totalNum);
+        cutThread.Thread_writeFile thf9=new cutThread.Thread_writeFile(inFilename,startNum,totalNum);
         thf9.start();
 
 
@@ -187,9 +187,8 @@ public class cutThread {
     //测试
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();    //获取开始时间
-        divide("seedSearchResult.txt",110224);
+        divide("seedSearchResult.txt",8588);
         long endTime = System.currentTimeMillis();    //获取结束时间
         System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间
     }
-
 }

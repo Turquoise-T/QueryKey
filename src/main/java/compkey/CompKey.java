@@ -18,10 +18,14 @@ public class CompKey {
         System.out.println("========================================================");
         System.out.println("开始查找中介关键词...");
         //分词
-        //方法一:单线程
+        //方法一:单线程ansj
 //        ansjCutData.cut_clean("seedSearchResult.txt");
-        //方法二:多线程
+        //方法二:多线程ansj
         cutThread.divide("seedSearchResult.txt",infoCounter);
+        //方法三:单线程jieba
+//        jiebaCutData.cut_clean("seedSearchResult.txt");
+        //方法三:多线程jieba
+//        jiebaCutThread.divide("seedSearchResult.txt",infoCounter);
         //词频统计
         countData.wordCount("cutted_seedSearchResult.txt",15);
         //确定中介关键词及相关搜索量
@@ -92,10 +96,14 @@ public class CompKey {
             //筛选出不含种子关键词但含有中介关键字的搜索数据，存储在相应的文件中
             int infCounter = compSearch.search(seedKey,midKey,String.format("src/main/resources/compkeyFiles/%sCompSearchResult.txt",midKey));
             //分词
-            //单线程
+            //单线程ansj
             //ansjCutData.cut_clean(String.format("%sCompSearchResult.txt",midKey));
-            //多线程
+            //多线程ansj
             cutThread.divide(String.format("%sCompSearchResult.txt",midKey),infCounter);
+            //方法三:单线程jieba
+//            jiebaCutData.cut_clean(String.format("%sCompSearchResult.txt",midKey));
+            //方法三:多线程jieba
+//            jiebaCutThread.divide(String.format("%sCompSearchResult.txt",midKey),infCounter);
             //词频统计
             countData.wordCount(String.format("cutted_%sCompSearchResult.txt",midKey),10);
 
